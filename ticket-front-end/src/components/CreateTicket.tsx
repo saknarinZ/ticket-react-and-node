@@ -10,12 +10,13 @@ const CreateTicket = ({ tickets, setTickets }: TicketProps) => {
     contactinformation: '',
   });
 
-  //   console.log(ticket);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //connect to backend API axios.post
     try {
+
+      if(!ticket.title || !ticket.description || !ticket.contactinformation) return toast.error('Please fill all fields' )
       const response = await axios
         .post('http://localhost:3000/api/tickets', ticket)
         .then((res) => {
