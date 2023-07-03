@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import axios from 'axios';
+import { BaseRepository } from '../api/BaseRepository';
 
 const ListTickts = ({ tickets, setTickets }: TicketProps) => {
   // console.log('🚀 ~ file: ListTickets.tsx:8 ~ ListTickts ~ tickets:', tickets[0]._id);
@@ -110,19 +111,17 @@ const Section = ({
   }
 
   const addItemToStatus = async (id: string) => {
+    const ticket = new BaseRepository();
+
     // Axios.put update status
     try {
       await axios.put(`http://localhost:3000/api/tickets/${id}`, {
         status: status,
       });
 
-      const response = await axios
-        .get('http://localhost:3000/api/tickets')
-        .then((items) => items.data);
-
-      const tickets = response.data.tickets;
+      const tickets = await ticket.fatchTickets();
       toast.success('Status updated successfully');
-      setTickets(tickets);
+      setTickets(tickets.data.tickets);
     } catch (error) {
       toast.error('Error updating status');
     }
@@ -179,13 +178,7 @@ const Ticket = ({ ticket, tickets, setTickets }: TicketProps) => {
 
   // console.log(drag);
 
-  // const hadleRemove = (id: string) => {
-  //   const ftickets = tickets.filter((ticket) => ticket._id !== id);
-  //   setTickets(ftickets);
-
-  //   localStorage.setItem('tasks', JSON.stringify(ftickets));
-  //   toast('Task deleted', { icon: '💀' });
-  // };
+  const hadleRemove = (id: string) => {};
 
   return (
     <div
@@ -201,9 +194,12 @@ const Ticket = ({ ticket, tickets, setTickets }: TicketProps) => {
         <span className="font-bold">description:</span> {ticket?.description}
       </p>
       <p>
-        <span className="font-bold">contact information:</span>{' '}
+        <span className="font-bold">contact information:</span>
         {ticket?.contactinformation}
       </p>
+      <button onClick={() => hadleRemove(ticket?._id!)}> hadleRemove</button>
     </div>
   );
 };
+
+

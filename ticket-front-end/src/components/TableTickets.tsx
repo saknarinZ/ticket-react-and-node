@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { ITicket } from '../interface/ticket.interface';
 import { Dropdown } from 'primereact/dropdown';
+import { BaseRepository } from '../api/BaseRepository';
 
 const TableTickets = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
@@ -20,6 +21,8 @@ const TableTickets = () => {
     value: string;
   }
 
+  const ticket = new BaseRepository();
+
   const items: Items[] = [
     { name: 'pending', value: 'pending' },
     { name: 'accepted', value: 'accepted' },
@@ -32,11 +35,7 @@ const TableTickets = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios
-          .get('http://localhost:3000/api/tickets')
-          .then((items) => {
-            return items.data;
-          });
+        const response = await ticket.fatchTickets();
         setTotalRecords(response.totalRecords);
         setTickets(response.data.tickets);
       } catch (error) {
