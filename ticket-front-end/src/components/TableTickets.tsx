@@ -21,7 +21,7 @@ const TableTickets = () => {
     value: string;
   }
 
-  const ticket = new BaseRepository();
+
 
   const items: Items[] = [
     { name: 'pending', value: 'pending' },
@@ -35,6 +35,7 @@ const TableTickets = () => {
 
     const fetchData = async () => {
       try {
+        const ticket = new BaseRepository();
         const response = await ticket.fatchTickets();
         setTotalRecords(response.totalRecords);
         setTickets(response.data.tickets);
